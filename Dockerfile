@@ -46,6 +46,6 @@ USER root
 RUN echo "shared_preload_libraries = 'timescaledb'" >> /usr/share/postgresql/postgresql.conf.sample
 
 # Initialize extensions
-USER 26
+USER 1001
 COPY --chown=postgres:postgres init-extensions.sh /docker-entrypoint-initdb.d/
 RUN chmod 0755 /docker-entrypoint-initdb.d/init-extensions.sh
