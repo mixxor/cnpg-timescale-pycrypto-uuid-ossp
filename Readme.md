@@ -17,4 +17,5 @@ This repository contains a Docker image for PostgreSQL 16 with TimescaleDB, Barm
 The image is available on GitHub Container Registry (GHCR):
 
 ```bash
-docker pull ghcr.io/<your-username>/cnpg-timescale:16
+docker pull ghcr.io/mixxor/cnpg-timescale:16
+```
