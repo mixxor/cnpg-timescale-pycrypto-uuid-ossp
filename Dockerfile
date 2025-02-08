@@ -44,15 +44,15 @@ COPY --from=builder /usr/share/postgresql/${PG_MAJOR}/extension/timescaledb* /us
 # Configure shared_preload_libraries and adjust user permissions
 USER root
 RUN echo "shared_preload_libraries = 'timescaledb'" >> /usr/share/postgresql/postgresql.conf.sample && \
-    # Create user 1001 if it doesn't exist and make it part of postgres group
-    groupmod -g 1001 postgres || true && \
-    usermod -u 1001 postgres && \
+    # Create user 1000 if it doesn't exist and make it part of postgres group
+    groupmod -g 1000 postgres || true && \
+    usermod -u 1000 postgres && \
     # Ensure correct ownership of PostgreSQL files
-    chown -R 1001:1001 /var/lib/postgresql && \
-    chown -R 1001:1001 /usr/lib/postgresql && \
-    chown -R 1001:1001 /usr/share/postgresql
+    chown -R 1000:1000 /var/lib/postgresql && \
+    chown -R 1000:1000 /usr/lib/postgresql && \
+    chown -R 1000:1000 /usr/share/postgresql
 
 # Initialize extensions
-USER 1001
-COPY --chown=1001:1001 init-extensions.sh /docker-entrypoint-initdb.d/
+USER 1000
+COPY --chown=1000:1000 init-extensions.sh /docker-entrypoint-initdb.d/
 RUN chmod 0755 /docker-entrypoint-initdb.d/init-extensions.sh

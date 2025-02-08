@@ -36,7 +36,7 @@ jobs:
       - name: Set custom image tags
         id: tags
         run: |
-          MAIN_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ env.TIMESCALE_VERSION }}:${{ env.PG_VERSION }}"
+          MAIN_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-opinionated-${{ env.TIMESCALE_VERSION }}:${{ env.PG_VERSION }}"
           LATEST_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           echo "tags=${MAIN_TAG},${LATEST_TAG}" >> $GITHUB_OUTPUT
 
