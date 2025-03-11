@@ -13,7 +13,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   PG_VERSION: "16.6-34"
   PG_MAJOR: "16"
-  TIMESCALE_VERSION: "2.13.x"
+  TIMESCALE_VERSION: "2.13.1"  # Use specific version instead of 2.13.x
 
 jobs:
   build-and-push:
@@ -21,7 +21,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,7 +35,7 @@ jobs:
       - name: Set custom image tags
         id: tags
         run: |
-          MAIN_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-opinionated-${{ env.TIMESCALE_VERSION }}:${{ env.PG_VERSION }}"
+          MAIN_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-timescale-${{ env.TIMESCALE_VERSION }}:${{ env.PG_VERSION }}"
           LATEST_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           echo "tags=${MAIN_TAG},${LATEST_TAG}" >> $GITHUB_OUTPUT
 

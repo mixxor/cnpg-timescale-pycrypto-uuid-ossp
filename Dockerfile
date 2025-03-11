@@ -6,16 +6,17 @@ FROM ghcr.io/cloudnative-pg/postgresql:${PG_VERSION}-bookworm
 FROM debian:bookworm-slim AS builder
 
 ARG PG_MAJOR=16
-ARG TIMESCALE_VERSION=2.13.x
+ARG TIMESCALE_VERSION=2.13.1
 
 # Add PGDG repository for PostgreSQL development packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
+        curl \
         gnupg \
-        wget && \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+        lsb-release && \
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     apt-get update
 
 # Install build dependencies
@@ -24,13 +25,17 @@ RUN apt-get install -y --no-install-recommends \
         cmake \
         git \
         postgresql-server-dev-${PG_MAJOR} \
-        libssl-dev && \
+        libssl-dev \
+        pkg-config \
+        python3 \
+        procps && \
     git clone https://github.com/timescale/timescaledb.git && \
     cd timescaledb && \
     git checkout ${TIMESCALE_VERSION} && \
-    ./bootstrap && \
-    make -C build && \
-    make -C build install
+    ./bootstrap -DCMAKE_BUILD_TYPE=Release && \
+    cd build && \
+    make && \
+    make install
 
 # Final image
 FROM ghcr.io/cloudnative-pg/postgresql:${PG_VERSION}-bookworm
