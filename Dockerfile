@@ -6,7 +6,7 @@ FROM ghcr.io/cloudnative-pg/postgresql:${PG_VERSION}-bookworm
 FROM debian:bookworm-slim AS builder
 
 ARG PG_MAJOR=16
-ARG TIMESCALE_VERSION=2.17.2
+ARG TIMESCALE_VERSION=2.13.1
 
 # Add PGDG repository for PostgreSQL development packages
 RUN apt-get update && \
@@ -22,6 +22,7 @@ RUN apt-get update && \
 # Install build dependencies
 RUN apt-get install -y --no-install-recommends \
         build-essential \
+        libkrb5-dev \
         cmake \
         git \
         postgresql-server-dev-${PG_MAJOR} \
